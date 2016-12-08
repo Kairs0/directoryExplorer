@@ -1,0 +1,20 @@
+README - TAREA 1 
+
+Quentin Duffeau 
+Rol USM : 20.169.0106-K 
+
+Arnaud Convers
+Rol USM : 90.001.550-K
+
+Important : we put the file listdir.c and not the listdir.o because we made modifications to this file. This is based on the listdir.c file made by Arnaud Convers during the pretarea.
+
+We use recursions for each functions on the trees. 
+
+We used a litle help from the programming blog brennan.io/ for develeopping the shell, especially to split the lines that the user would put.
+
+The makefile contains 3 commands :
+- the make(all) which will make the the object program "tarea1"
+
+- the make clean which will clear the folder, erasing all intermediate files *.o created
+
+- the make mrproper which will do the same thing as the make clean and remove the executable file.
