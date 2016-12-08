@@ -1,12 +1,8 @@
-README - TAREA 1 
+README 
 
-Quentin Duffeau 
-Rol USM : 20.169.0106-K 
+A little tool made during a programming course in Chile. 
 
-Arnaud Convers
-Rol USM : 90.001.550-K
-
-Important : we put the file listdir.c and not the listdir.o because we made modifications to this file. This is based on the listdir.c file made by Arnaud Convers during the pretarea.
+Main feature: optimized search for files of folder within any folder
 
 We use recursions for each functions on the trees. 
 
