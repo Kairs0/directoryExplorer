@@ -1,4 +1,4 @@
-all: tarea1.c listdir.c cmds.c
+all: main.c listdir.c cmds.c
 	gcc -g -Wall -o directoryExplorer main.c tree.c listdir.c cmds.c
 
 clean:
