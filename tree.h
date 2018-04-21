@@ -52,15 +52,15 @@ void locatePartial(struct lnode *tree, const char *name);
 //Structure of the tree
 struct lnode
 {
-	struct tnode *value;
-	struct lnode *next;
+    struct tnode *value;
+    struct lnode *next;
 };
 
 struct tnode
 {
-	char *name;
-	int is_dir;
-	struct lnode *children;
+    char *name;
+    int is_dir;
+    struct lnode *children;
 };
 
 #endif

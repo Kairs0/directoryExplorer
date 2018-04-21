@@ -15,9 +15,9 @@ void suppr(struct list_node **list);
 
 struct list_node
 {
-	char *name;
-	int is_dir;
-	struct list_node *next;
+    char *name;
+    int is_dir;
+    struct list_node *next;
 };
 
 #endif
