@@ -321,9 +321,6 @@ void printFoldersOnly(struct lnode *tree)
     printTreeLevelFolders(tree,0);
 }
 
-
-
-
 //Print the path of all files in the tree
 int printTreeFilesRecurr(struct lnode *tree, const char *path, int printed)
 {
@@ -337,11 +334,12 @@ int printTreeFilesRecurr(struct lnode *tree, const char *path, int printed)
         printf("%s\n", newPath);
         printed++;
     }
+
     if(tree->value->children != NULL) {
         struct lnode *aux = malloc(sizeof(struct lnode));
         aux = tree->value->children;
         while (aux != NULL) {
-            printed = printTreeFilesRecurr(aux,newPath,printed);
+            printed = printTreeFilesRecurr(aux, newPath, printed);
             aux = aux->next;
         }
     }
