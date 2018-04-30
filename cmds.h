@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <string.h>
 #include "tree.h"
+#include "printUtils.h"
 
 //Typedef pointer to function
 typedef void(*cmd_t)(struct lnode*, char **);

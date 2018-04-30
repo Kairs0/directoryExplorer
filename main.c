@@ -4,8 +4,9 @@
 // #include <dirent.h>
 // #include <unistd.h>
 
+#include "printUtils.h"
 #include "tree.h"
-#include "listdir.h"
+// #include "listdir.h"
 #include "cmds.h"
 
 #define NO_PATH "No path provided."
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     if (argv[1] == NULL) {
         printf("%s %s\n", NO_PATH, IO_ERR);
         return -1;
-    }
+    }    
 
     if (argv[2] == NULL) {
         a = createTreeLimited(argv[1], 0);
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
         else 
             a = createTreeLimited(argv[1], depth);
     }
+    
 
     if (a != NULL)
         shell(a);
