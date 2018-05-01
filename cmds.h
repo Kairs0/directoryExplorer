@@ -20,5 +20,6 @@ void shell(struct lnode *tree);
 void list(struct lnode* tree, char **argv);
 void fext(struct lnode* tree, char **argv);
 void locate(struct lnode* tree, char **argv);
+void help(struct lnode * tree, char **argv);
 
 #endif
