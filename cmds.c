@@ -10,12 +10,13 @@ void shell(struct lnode *tree)
     int open = 1;
 
     //List of names of the functions
-    const char *cmds[] = {"list","fext","locate"};
+    const char *cmds[] = {"list", "fext", "locate", "help"};
 
     cmd_t actions[3];
     actions[0] = &list;
     actions[1] = &fext;
     actions[2] = &locate;
+    actions[3] = &help;
 
 
     printf("\nWelcome to the managing files interface.\n"
@@ -24,40 +25,40 @@ void shell(struct lnode *tree)
         ": \n\nlist [filonly|dironly]\nfext <ext>\nlocate "
         "<pattern> (full|partial)\nquit\n\n");
 
-    while (open == 1) {
+    while (open) {
         printf("> ");
         line = readLine();
         args = splitLine(line);
 
-        int j = 3; //Number of commands disponibles
+        int j = 4; //Number of commands available
         int i = 0;
 
-        for (i = 0; i<j; i++) {
-            if(strcmp(cmds[i],args[0]) == 0)
-                actions[i](tree,args);
+        for (i = 0; i < j; i++) {
+            if(strcmp(cmds[i], args[0]) == 0)
+                actions[i](tree, args);
         }
 
-        if(strcmp(args[0],"quit") == 0)
+        if(strcmp(args[0], "quit") == 0)
             open = 0;
     }
 }
 
 //Get the line the user will type
-char *readLine()
+char * readLine()
 {
     char *line = NULL;
     size_t sizeBuffer = 0;
-    getline(&line,&sizeBuffer,stdin);
+    getline(&line, &sizeBuffer, stdin);
     return line;
 }
 
 //split a line in differents words
-char **splitLine(char *line)
+char ** splitLine(char *line)
 {
     int sizeBuffer = 64;
     int position = 0;
-    char ** tokens = malloc(sizeBuffer*sizeof(char*));
-    char *token;
+    char ** tokens = malloc(sizeBuffer * sizeof(char *));
+    char * token;
 
     token = strtok(line, delim);
     while (token != NULL) {
@@ -70,13 +71,21 @@ char **splitLine(char *line)
     return tokens;
 }
 
+void help(struct lnode * tree, char **argv) {
+    printf("\nWelcome to the managing files interface.\n"
+        "The directory was successfuly opened, and you "
+        "can use the following commands "
+        ": \n\nlist [filonly|dironly]\nfext <ext>\nlocate "
+        "<pattern> (full|partial)\nquit\n\n");
+}
+
 //The list function
 void list(struct lnode* tree, char **argv)
 {
     if (argv[1] == NULL)
         printTree(tree);
     else {
-        if (strcmp(argv[1],"fileonly") == 0)
+        if (strcmp(argv[1], "fileonly") == 0)
             printFilesOnly(tree);
         else if (strcmp(argv[1],"dironly") == 0)
             printFoldersOnly(tree);
@@ -91,9 +100,9 @@ void list(struct lnode* tree, char **argv)
 void fext(struct lnode* tree, char **argv)
 {
     if (argv[1] == NULL)
-        printf("You should put in argument an extension.\n");
+        printf("You must provide an extension in argument.\n");
     else
-        filesExtOnly(tree,argv[1]);
+        filesExtOnly(tree, argv[1]);
 }
 
 //The locate function
@@ -104,9 +113,9 @@ void locate(struct lnode* tree, char **argv)
             "be used to search, and \"full\" or \"partial\" as the second "
             "parameter. \n");
     } else {
-        if (strcmp(argv[2],"full") == 0)
+        if (strcmp(argv[2], "full") == 0)
             locateFull(tree, argv[1]);
-        else if (strcmp(argv[2],"partial") == 0)
+        else if (strcmp(argv[2], "partial") == 0)
             locatePartial(tree, argv[1]);
         else
             printf("You should specify \"full\" or \"partial\" for the "
