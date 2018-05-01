@@ -25,14 +25,14 @@ struct lnode *createOneNode(const char *path)
 
     //Gets the name of the directory or folder
     char *nameFile;
-    nameFile = strrchr(localPath,'/') + 1;
+    nameFile = strrchr(localPath, '/') + 1;
 
     DIR *dir = NULL;
     dir = opendir(path);
     if (dir != NULL) {
         //Add "/" as the last character if it's a folder
         char slash[] = "/";
-        strcat(nameFile,slash);
+        strcat(nameFile, slash);
 
         newNode->value->is_dir = 1;
         newNode->value->name = strdup(nameFile);        
