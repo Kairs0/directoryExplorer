@@ -47,7 +47,7 @@ struct list_node *listdir(const char *path)
                 strcpy(new->name,actualfile->d_name);
 
                 struct list_node *aux = NULL;
-                aux = malloc(sizeof(struct list_node));
+                // aux = malloc(sizeof(struct list_node));
                 aux = files;
 
                 if (actualfile->d_type == DT_DIR) {
@@ -69,7 +69,7 @@ struct list_node *listdir(const char *path)
                         files->next = NULL;
                     } else {
                         aux = files;
-                        while(aux->next != NULL)
+                        while(aux->next != NULL) //SEG FAULT
                             aux = aux->next;
                         aux->next = new;
                     }
