@@ -22,7 +22,7 @@ void shell(struct lnode *tree)
     printf("\nWelcome to the managing files interface.\n"
         "The directory was successfuly opened, and you "
         "can use the following commands "
-        ": \n\nlist [filonly|dironly]\nfext <ext>\nlocate "
+        ": \n\nlist [fileonly|dironly]\nfext <ext>\nlocate "
         "<pattern> (full|partial)\nquit\n\n");
 
     while (open) {
