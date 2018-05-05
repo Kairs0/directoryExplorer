@@ -12,31 +12,20 @@ struct list_node *listdir(const char *path)
         //Path isn't correct or is the path of a file
         return NULL;
     } else {
+
+        //We return a NULL pointer if the folder is empty.
+        if (isFolderEmpty(dir))
+            return NULL;
+
         struct dirent *actualfile = NULL;
         actualfile = readdir(dir);
 
         // define a file default container
-
         struct list_node *files = NULL;
         files = malloc(sizeof(struct list_node));
         files->next = NULL;//TESSSST
         files->name = NULL;
 
-        //If the folder is empty, there are only two elements inside
-        //We return a NULL pointer if the folder is empty.
-        int compt = 0;
-        while (actualfile != NULL) {
-            compt++;
-            actualfile = readdir(dir);
-        }
-
-        if (compt == 2) {
-            //The folder is empty
-            return NULL;
-        }
-
-        //We go back to the beginning the stream of reading
-        rewinddir(dir);
         actualfile = readdir(dir);
 
         int compt_debug = 0;
@@ -76,6 +65,7 @@ struct list_node *listdir(const char *path)
                     } else {
                         // aux = files;
                         while(aux->next != NULL) //SEG FAULT
+                            // (*aux) = *(aux->next);
                             aux = aux->next;
                         aux->next = new;
                     }
@@ -86,6 +76,20 @@ struct list_node *listdir(const char *path)
         closedir(dir);
         return files;
     }
+}
+
+int isFolderEmpty(DIR * dir) {
+    // If the folder is empty, there are only two elements inside ('.' and '..')
+    struct dirent *file = NULL;
+    file = readdir(dir);
+    int c = 0;
+    while (file != NULL) {
+        c++;
+        file = readdir(dir);
+    }
+    rewinddir(dir);
+
+    return c == 2;
 }
 
 //Prints the names of folders/files in the given linked list.

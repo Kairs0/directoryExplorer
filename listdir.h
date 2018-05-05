@@ -9,6 +9,8 @@
 struct list_node *listdir(const char *path);
 void clean_dirlist(struct list_node **list);
 
+int isFolderEmpty(DIR * dir);
+
 void printdir(struct list_node *list);
 void suppr(struct list_node **list);
 
