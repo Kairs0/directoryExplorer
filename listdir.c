@@ -25,16 +25,14 @@ struct list_node *listdir(const char *path)
 
     pCurrentFile = readdir(dir);
 
-    int compt_debug = 0;
 
     while (pCurrentFile != NULL) {
         //We do not consider the parent folder and the actual folder           
-        if (strcmp(pCurrentFile->d_name,".") != 0 && strcmp(pCurrentFile->d_name,"..") != 0) {
-            compt_debug++;
+        if (strcmp(pCurrentFile->d_name, ".") != 0 && strcmp(pCurrentFile->d_name, "..") != 0) {
             struct list_node *new = NULL;
             new = malloc(sizeof(struct list_node));
 
-            new->name = malloc(200*sizeof(char)); //potential bug
+            new->name = malloc(600*sizeof(char)); //potential bug
             strcpy(new->name, pCurrentFile->d_name);
 
             struct list_node *aux = NULL;
@@ -84,7 +82,6 @@ int isFolderEmpty(DIR * dir) {
         file = readdir(dir);
     }
     rewinddir(dir);
-
     return c == 2;
 }
 

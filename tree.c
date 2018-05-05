@@ -184,6 +184,7 @@ struct lnode *createTree(const char *path)
 }
 
 //Creates the tree with the specified level of depth
+//STACK OVERFLOW FROM THIS FUNCTION ON LARGE FILES
 struct lnode *createTreeLimited(const char *path, int level)
 {
     if (level < 0) {
@@ -256,7 +257,7 @@ struct lnode *createTreeLimited(const char *path, int level)
                 }
 
                 strcat(dest, aux->value->name);
-                putAsAChild(a, createTreeLimited(dest,level-1));
+                putAsAChild(a, createTreeLimited(dest, level-1));
 
                 aux = aux->next;
             }
