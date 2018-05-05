@@ -1,81 +1,77 @@
 #include "listdir.h"
 
-//Returns a linked_list of folders and files from the path given
-//Returns a NULL pointer if this the path is a file or is not correct
+/*
+Returns a linked_list of folders and files from the given path
+Returns a NULL pointer if:
+    - the path is not correct,
+    - the path is a filer,
+    - the folder is empty.
+*/
 struct list_node *listdir(const char *path)
 {
     DIR *dir = NULL;
     dir = opendir(path);
 
-    //Returns a NULL pointer if the path is not correct
-    if (dir == NULL) {
-        //Path isn't correct or is the path of a file
+    if (dir == NULL || isFolderEmpty(dir))
         return NULL;
-    } else {
 
-        //We return a NULL pointer if the folder is empty.
-        if (isFolderEmpty(dir))
-            return NULL;
+    struct dirent *pCurrentFile = readdir(dir);
 
-        struct dirent *actualfile = NULL;
-        actualfile = readdir(dir);
+    // define a file default container
+    struct list_node *files = NULL;
+    files = malloc(sizeof(struct list_node));
+    files->next = NULL;
+    files->name = NULL;
 
-        // define a file default container
-        struct list_node *files = NULL;
-        files = malloc(sizeof(struct list_node));
-        files->next = NULL;//TESSSST
-        files->name = NULL;
+    pCurrentFile = readdir(dir);
 
-        actualfile = readdir(dir);
+    int compt_debug = 0;
 
-        int compt_debug = 0;
+    while (pCurrentFile != NULL) {
+        //We do not consider the parent folder and the actual folder           
+        if (strcmp(pCurrentFile->d_name,".") != 0 && strcmp(pCurrentFile->d_name,"..") != 0) {
+            compt_debug++;
+            struct list_node *new = NULL;
+            new = malloc(sizeof(struct list_node));
 
-        while (actualfile != NULL) {
-            //We do not consider the parent folder and the actual folder           
-            if (strcmp(actualfile->d_name,".") != 0 && strcmp(actualfile->d_name,"..") != 0) {
-                compt_debug++;
-                struct list_node *new = NULL;
-                new = malloc(sizeof(struct list_node));
+            new->name = malloc(200*sizeof(char)); //potential bug
+            strcpy(new->name, pCurrentFile->d_name);
 
-                new->name = malloc(200*sizeof(char)); //potential bug
-                strcpy(new->name, actualfile->d_name);
+            struct list_node *aux = NULL;
+            aux = malloc(sizeof(struct list_node));
+            aux = files; //maybe change (assign value and not pointer)
 
-                struct list_node *aux = NULL;
-                aux = malloc(sizeof(struct list_node));
-                aux = files; //maybe change (assign value and not pointer)
+            if (pCurrentFile->d_type == DT_DIR) {
+                new->is_dir = 1;
+                //We always place the folder at the beginning of the list.
+                //But if the file is empty, we put a null pointer
+                //as a follower of the new member.
+                if(files->name == NULL)
+                    new->next = NULL;             
+                else
+                    new->next = files;
+                files = new ;
+            } else if (pCurrentFile->d_type == DT_REG) {
+                new->is_dir = 0;
 
-                if (actualfile->d_type == DT_DIR) {
-                    new->is_dir = 1;
-                    //We always place the folder at the beginning of the list.
-                    //But if the file is empty, we put a null pointer
-                    //as a follower of the new member.
-                    if(files->name == NULL)
-                        new->next = NULL;             
-                    else
-                        new->next = files;
-                    files = new ;
-                } else if (actualfile->d_type == DT_REG) {
-                    new->is_dir = 0;
-
-                    //If there is no file yet in the list, we put it right now.
-                    //Else we put it at the end of the list
-                    if (files->name == NULL) {
-                        files = new;
-                        files->next = NULL;
-                    } else {
-                        // aux = files;
-                        while(aux->next != NULL) //SEG FAULT
-                            // (*aux) = *(aux->next);
-                            aux = aux->next;
-                        aux->next = new;
-                    }
+                //If there is no file yet in the list, we put it right now.
+                //Else we put it at the end of the list
+                if (files->name == NULL) {
+                    files = new;
+                    files->next = NULL;
+                } else {
+                    // aux = files;
+                    while(aux->next != NULL) //SEG FAULT
+                        // (*aux) = *(aux->next);
+                        aux = aux->next;
+                    aux->next = new;
                 }
             }
-            actualfile = readdir(dir);
         }
-        closedir(dir);
-        return files;
+        pCurrentFile = readdir(dir);
     }
+    closedir(dir);
+    return files;
 }
 
 int isFolderEmpty(DIR * dir) {
