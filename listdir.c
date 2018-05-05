@@ -15,6 +15,8 @@ struct list_node *listdir(const char *path)
         struct dirent *actualfile = NULL;
         actualfile = readdir(dir);
 
+        // define a file default container
+
         struct list_node *files = NULL;
         files = malloc(sizeof(struct list_node));
         files->next = NULL;//TESSSST
@@ -37,18 +39,21 @@ struct list_node *listdir(const char *path)
         rewinddir(dir);
         actualfile = readdir(dir);
 
+        int compt_debug = 0;
+
         while (actualfile != NULL) {
             //We do not consider the parent folder and the actual folder           
             if (strcmp(actualfile->d_name,".") != 0 && strcmp(actualfile->d_name,"..") != 0) {
+                compt_debug++;
                 struct list_node *new = NULL;
                 new = malloc(sizeof(struct list_node));
 
-                new->name = malloc(200*sizeof(char));
-                strcpy(new->name,actualfile->d_name);
+                new->name = malloc(200*sizeof(char)); //potential bug
+                strcpy(new->name, actualfile->d_name);
 
                 struct list_node *aux = NULL;
-                // aux = malloc(sizeof(struct list_node));
-                aux = files;
+                aux = malloc(sizeof(struct list_node));
+                aux = files; //maybe change (assign value and not pointer)
 
                 if (actualfile->d_type == DT_DIR) {
                     new->is_dir = 1;
@@ -63,12 +68,13 @@ struct list_node *listdir(const char *path)
                 } else if (actualfile->d_type == DT_REG) {
                     new->is_dir = 0;
 
-                    //If there is no file yet in the list
+                    //If there is no file yet in the list, we put it right now.
+                    //Else we put it at the end of the list
                     if (files->name == NULL) {
                         files = new;
                         files->next = NULL;
                     } else {
-                        aux = files;
+                        // aux = files;
                         while(aux->next != NULL) //SEG FAULT
                             aux = aux->next;
                         aux->next = new;
