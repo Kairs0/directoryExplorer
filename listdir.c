@@ -18,58 +18,75 @@ struct list_node *listdir(const char *path)
     struct dirent *pCurrentFile = readdir(dir);
 
     // define a file default container
-    struct list_node *files = NULL;
-    files = malloc(sizeof(struct list_node));
-    files->next = NULL;
-    files->name = NULL;
+    int size = numberElementsFolder(dir);
+    struct list_node *pListContainer = NULL;
+    pListContainer = malloc(size * sizeof(struct list_node));
+    pListContainer->next = NULL;
+    pListContainer->name = NULL;
 
     pCurrentFile = readdir(dir);
 
 
     while (pCurrentFile != NULL) {
-        //We do not consider the parent folder and the actual folder           
-        if (strcmp(pCurrentFile->d_name, ".") != 0 && strcmp(pCurrentFile->d_name, "..") != 0) {
-            struct list_node *new = NULL;
-            new = malloc(sizeof(struct list_node));
+        //We do not consider the parent folder and the actual folder
+        if (strcmp(pCurrentFile->d_name, ".") == 0 || strcmp(pCurrentFile->d_name, "..") == 0) {
+            pCurrentFile = readdir(dir);
+            continue;
+        }
 
-            new->name = malloc(600*sizeof(char)); //potential bug
-            strcpy(new->name, pCurrentFile->d_name);
+        struct list_node *pNewFile = NULL;
+        pNewFile = malloc(sizeof(struct list_node));
 
-            struct list_node *aux = NULL;
-            aux = malloc(sizeof(struct list_node));
-            aux = files; //maybe change (assign value and not pointer)
+        pNewFile->name = malloc(600*sizeof(char)); // potential bug
+        strcpy(pNewFile->name, pCurrentFile->d_name);
 
-            if (pCurrentFile->d_type == DT_DIR) {
-                new->is_dir = 1;
-                //We always place the folder at the beginning of the list.
-                //But if the file is empty, we put a null pointer
-                //as a follower of the new member.
-                if(files->name == NULL)
-                    new->next = NULL;             
-                else
-                    new->next = files;
-                files = new ;
-            } else if (pCurrentFile->d_type == DT_REG) {
-                new->is_dir = 0;
+        struct list_node *aux = NULL;
+        aux = malloc(sizeof(struct list_node));
+        (*aux) = (*pListContainer); // 
 
-                //If there is no file yet in the list, we put it right now.
-                //Else we put it at the end of the list
-                if (files->name == NULL) {
-                    files = new;
-                    files->next = NULL;
-                } else {
-                    // aux = files;
-                    while(aux->next != NULL) //SEG FAULT
-                        // (*aux) = *(aux->next);
-                        aux = aux->next;
-                    aux->next = new;
-                }
+        if (pCurrentFile->d_type == DT_DIR) {
+            pNewFile->is_dir = 1;
+            //We always place the folder at the beginning of the list.
+            //But if the file is empty, we put a null pointer
+            //as a follower of the new member.
+            if(pListContainer->name == NULL)
+                pNewFile->next = NULL;             
+            else
+                pNewFile->next = pListContainer;
+            pListContainer = pNewFile ;
+        } else if (pCurrentFile->d_type == DT_REG) {
+            pNewFile->is_dir = 0;
+
+            //If there is no file yet in the list, we put it right now.
+            //Else we put it at the end of the list
+            if (pListContainer->name == NULL) {
+                pListContainer = pNewFile;
+                pListContainer->next = NULL;
+            } else {
+                // aux = pListContainer;
+                while(aux->next != NULL) //SEG FAULT
+                    // (*aux) = *(aux->next);
+                    aux = aux->next;
+                aux->next = pNewFile;
             }
         }
+        
         pCurrentFile = readdir(dir);
     }
     closedir(dir);
-    return files;
+    return pListContainer;
+}
+
+int numberElementsFolder(DIR * dir) {
+    struct dirent * file = NULL;
+    file = readdir(dir);
+    int c = 0;
+    while (file != NULL) {
+        c++;
+        file = readdir(dir);
+    }
+    rewinddir(dir);
+    return c - 2;
 }
 
 int isFolderEmpty(DIR * dir) {
