@@ -26,7 +26,6 @@ struct list_node *listdir(const char *path)
 
     pCurrentFile = readdir(dir);
 
-
     while (pCurrentFile != NULL) {
         //We do not consider the parent folder and the actual folder
         if (strcmp(pCurrentFile->d_name, ".") == 0 || strcmp(pCurrentFile->d_name, "..") == 0) {
@@ -40,34 +39,48 @@ struct list_node *listdir(const char *path)
         pNewFile->name = malloc(600*sizeof(char)); // potential bug
         strcpy(pNewFile->name, pCurrentFile->d_name);
 
+        /*
         struct list_node *aux = NULL;
         aux = malloc(sizeof(struct list_node));
-        (*aux) = (*pListContainer); // 
+        (*aux) = (*pListContainer);
+        */
 
         if (pCurrentFile->d_type == DT_DIR) {
             pNewFile->is_dir = 1;
             //We always place the folder at the beginning of the list.
             //But if the file is empty, we put a null pointer
             //as a follower of the new member.
-            if(pListContainer->name == NULL)
-                pNewFile->next = NULL;             
-            else
-                pNewFile->next = pListContainer;
-            pListContainer = pNewFile ;
+
+            //INTENT WITH NEW FUNC
+            addToHead((*pNewFile), pListContainer);
+            //END INTENT
+
         } else if (pCurrentFile->d_type == DT_REG) {
             pNewFile->is_dir = 0;
 
             //If there is no file yet in the list, we put it right now.
             //Else we put it at the end of the list
             if (pListContainer->name == NULL) {
+
+                //INTENT WITH NEW FUNC
+                addToHead(*pNewFile, pListContainer);
+                //END INTENT
+
+                /*
                 pListContainer = pNewFile;
-                pListContainer->next = NULL;
+                pListContainer->next = NULL;*/
             } else {
+                // INTENT WITH NEW FUNC
+                addToEnd(*pNewFile, pListContainer);
+                //END INTENT
+
+                /*
                 // aux = pListContainer;
                 while(aux->next != NULL) //SEG FAULT
                     // (*aux) = *(aux->next);
                     aux = aux->next;
-                aux->next = pNewFile;
+
+                aux->next = pNewFile;*/
             }
         }
         
@@ -75,6 +88,33 @@ struct list_node *listdir(const char *path)
     }
     closedir(dir);
     return pListContainer;
+}
+
+struct list_node * create(char * name, int isDir, struct list_node * next) {
+    struct list_node * newNode = malloc(sizeof(struct list_node));
+    strcpy(newNode->name, name);
+    newNode->is_dir = isDir;
+    newNode->next = next;
+    return newNode;
+}
+
+void addToHead(struct list_node value, struct list_node * pHead) {
+    struct list_node * newNode = malloc(sizeof(struct list_node));
+    (*newNode) = value;
+    newNode->next = pHead;
+    pHead = newNode;
+}
+
+void addToEnd(struct list_node value, struct list_node * pHead) {
+    struct list_node * newNode = malloc(sizeof(struct list_node));
+    (*newNode) = value;
+    newNode->next = NULL;
+
+    struct list_node * cursor = pHead;
+    while (cursor->next != NULL)
+        cursor = cursor->next;
+
+    cursor->next = newNode;
 }
 
 int numberElementsFolder(DIR * dir) {
@@ -116,8 +156,6 @@ void printdir(struct list_node *list)
         aux = aux->next;
     }
 }
-
-
 
 //Erase a given node
 //We do not erase list->is_dir : hence it was created
