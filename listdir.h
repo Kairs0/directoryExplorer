@@ -20,7 +20,7 @@ int isFolderEmpty(DIR * dir);
 int numberElementsFolder(DIR * dir);
 
 struct list_node * create(char * name, int isDir, struct list_node * next);
-void addToHead(struct list_node value, struct list_node * pHead);
+void addToHead(struct list_node value, struct list_node ** pHead);
 void addToEnd(struct list_node value, struct list_node * pHead);
 
 void printdir(struct list_node *list);
