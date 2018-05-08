@@ -1,10 +1,10 @@
 #include "listdir.h"
 
 /*
-Returns a linked_list of folders and files from the given path
+Returns a linked list of folders and files from the given path
 Returns a NULL pointer if:
     - the path is not correct,
-    - the path is a filer,
+    - the path is a file,
     - the folder is empty.
 */
 struct list_node *listdir(const char *path)
@@ -28,7 +28,7 @@ struct list_node *listdir(const char *path)
     int counterElementsList = 0;
 
     while (pCurrentFile != NULL) {
-        //We do not consider the parent folder and the actual folder
+        //We do not consider the parent folder and the current folder
         if (strcmp(pCurrentFile->d_name, ".") == 0 || strcmp(pCurrentFile->d_name, "..") == 0) {
             pCurrentFile = readdir(dir);
             continue;
@@ -53,7 +53,6 @@ struct list_node *listdir(const char *path)
 
         } else if (pCurrentFile->d_type == DT_REG) {
             pNewFile->is_dir = 0;
-
             if (counterElementsList == 0)
                 pListContainer = create(pNewFile->name, 0, NULL);
             else

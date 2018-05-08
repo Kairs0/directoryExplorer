@@ -176,7 +176,7 @@ struct lnode *createTree(const char *path)
                 strcat(dest, slash);
             }
             strcat(dest, aux->value->name);
-            putAsAChild(a,createTree(dest));
+            putAsAChild(a, createTree(dest));
             aux=aux->next;
             }
         return a;
