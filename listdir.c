@@ -69,6 +69,8 @@ struct list_node *listdir(const char *path)
 
 struct list_node * create(char * name, int isDir, struct list_node * next) {
     struct list_node * newNode = malloc(sizeof(struct list_node));
+    size_t nameLen = strlen(name);
+    newNode->name = malloc(nameLen * sizeof(char) + 1);
     strcpy(newNode->name, name);
     newNode->is_dir = isDir;
     newNode->next = next;
