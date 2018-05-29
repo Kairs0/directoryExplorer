@@ -13,6 +13,8 @@ struct list_node
     struct list_node *next;
 };
 
+typedef struct list_node List_Node;
+
 struct list_node *listdir(const char *path);
 void clean_dirlist(struct list_node **list);
 
@@ -25,5 +27,8 @@ void addToEnd(struct list_node value, struct list_node * pHead);
 
 void printdir(struct list_node *list);
 void suppr(struct list_node **list);
+
+void eraseDataNode(List_Node *node);
+void freeList(List_Node * head);
 
 #endif

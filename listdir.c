@@ -19,7 +19,7 @@ struct list_node *listdir(const char *path)
 
     int size = numberElementsFolder(dir);
     struct list_node *pListContainer = NULL;
-    pListContainer = malloc(size * sizeof(struct list_node));
+    pListContainer = malloc(size * sizeof(struct list_node)); //TODO
     pListContainer->next = NULL;
     pListContainer->name = NULL;
 
@@ -35,9 +35,9 @@ struct list_node *listdir(const char *path)
         }
 
         struct list_node *pNewFile = NULL;
-        pNewFile = malloc(sizeof(struct list_node));
+        pNewFile = malloc(sizeof(struct list_node)); //TODO
 
-        pNewFile->name = malloc(600*sizeof(char)); // potential bug
+        pNewFile->name = malloc(600*sizeof(char)); // potential bug //TODO
         pNewFile->next = NULL;
         strcpy(pNewFile->name, pCurrentFile->d_name);
 
@@ -68,7 +68,7 @@ struct list_node *listdir(const char *path)
 }
 
 struct list_node * create(char * name, int isDir, struct list_node * next) {
-    struct list_node * newNode = malloc(sizeof(struct list_node));
+    struct list_node * newNode = malloc(sizeof(struct list_node)); //TODO
     size_t nameLen = strlen(name);
     newNode->name = malloc(nameLen * sizeof(char) + 1);
     strcpy(newNode->name, name);
@@ -135,6 +135,26 @@ void printdir(struct list_node *list)
             printf("%s\n",aux->name);
         aux = aux->next;
     }
+}
+
+void freeList(List_Node * head){
+    List_Node * aux = NULL;
+    aux = head;
+    while (aux != NULL) {
+        eraseDataNode(aux);
+        aux = aux->next;
+    }
+    aux = head;
+    while (aux != NULL) {
+        List_Node * temp = aux;
+        aux = temp->next;
+        free(temp);
+    }
+    free(head);
+}
+
+void eraseDataNode(List_Node *node){
+    free(node->name);
 }
 
 //Erase a given node
