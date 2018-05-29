@@ -60,6 +60,15 @@ Wil return a NULL pointer if the path is incorrect
 */
 struct lnode *createTreeOneLevel(const char *path)
 {
+    //DEBUG
+
+    if (strstr(path, "/home/kairs0/Documents/learningVim/") != NULL){
+        int bp = 0;
+    }
+
+    //END DEBUG
+
+
     struct lnode *newNode = NULL;
     newNode = malloc(sizeof(struct lnode));
     //We start to get the first node
@@ -99,7 +108,7 @@ struct lnode *createTreeOneLevel(const char *path)
             struct tnode *getNextChildValue = NULL;
             getNextChildValue = malloc(sizeof(struct tnode));
 
-            getNextChildValue->name = strdup(listChildren->name);
+            getNextChildValue->name = strdup(listChildren->name); //!!!!!Between this point
             getNextChildValue->is_dir = listChildren->is_dir;
             if (listChildren->is_dir) {
                 char slash[] = "/";
@@ -115,7 +124,7 @@ struct lnode *createTreeOneLevel(const char *path)
             while (aux->next != NULL)
                 aux = aux->next;
 
-            aux->next = getNextChild;
+            aux->next = getNextChild; //And this point, "\021" is added at the end at "learningVim/" folder
 
             listChildren = listChildren->next;
         }
