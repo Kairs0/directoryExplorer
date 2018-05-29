@@ -4,6 +4,9 @@ all: main.c listdir.c cmds.c
 graph:
 	gcc -pg main.c tree.c listdir.c cmds.c printUtils.c
 
+test:
+	gcc -Wall -o binTest tests.c listdir.c
+
 clean:
 	rm -rf *.o
 
@@ -11,3 +14,5 @@ mrproper: clean
 	rm -rf directoryExplorerGraph
 	rm -rf directoryExplorer
 	rm -rf *.stackdump
+	rm -rf binTest
+	rm -rf a.out
