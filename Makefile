@@ -5,7 +5,7 @@ graph:
 	gcc -pg main.c tree.c listdir.c cmds.c printUtils.c
 
 test:
-	gcc -Wall -o binTest tests.c listdir.c
+	gcc -g -Wall -o binTest tests.c listdir.c
 
 clean:
 	rm -rf *.o
