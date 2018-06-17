@@ -13,3 +13,7 @@ _Reinventing the wheel._
 - `make(all)` : generate executable
 - `make clean` : clear the folder from object files
 - `make mrproper` : clean and remove executable file
+
+## Valgrind use
+
+` valgrind --leak-check=full --track-origins=yes ./binTest`

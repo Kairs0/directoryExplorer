@@ -150,7 +150,7 @@ void freeList(List_Node * head){
         aux = temp->next;
         free(temp);
     }
-    free(head);
+    // free(head);
 }
 
 void eraseDataNode(List_Node *node){
