@@ -7,15 +7,16 @@
 int test_freeList();
 int test_listdir();
 
+
+#define LAUNCH_TEST(function) do { if(function()) \
+    printf("%-15s : sucess\n", #function); \
+    else printf("%-15s : failed\n", #function);} while(0);
+
+
 int main(int argc, char const *argv[])
 {
-    //struct list_node *result = listdir("/home/kairs0/Documents");
-
-    test_freeList();
-    test_listdir();
-    // clean_dirlist(&result);
-
-
+    LAUNCH_TEST(test_listdir);
+    LAUNCH_TEST(test_freeList);
     return 0;
 }
 

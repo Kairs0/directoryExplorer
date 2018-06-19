@@ -7,21 +7,21 @@ Returns a NULL pointer if:
     - the path is a file,
     - the folder is empty.
 */
-struct list_node *listdir(const char *path)
+struct list_node * listdir(const char *path)
 {
-    DIR *dir = NULL;
+    DIR * dir = NULL;
     dir = opendir(path);
 
     if (dir == NULL || isFolderEmpty(dir))
         return NULL;
 
-    struct dirent *pCurrentFile = readdir(dir);
+    struct dirent * pCurrentFile = readdir(dir);
 
     int size = numberElementsFolder(dir);
-    struct list_node *pListContainer = NULL;
-    pListContainer = malloc(size * sizeof(struct list_node)); //TODO
-    pListContainer->next = NULL;
-    pListContainer->name = NULL;
+    struct list_node * pListContainer = NULL;
+    // pListContainer = malloc(size * sizeof(struct list_node)); //TODO
+    // pListContainer->next = NULL;
+    // pListContainer->name = NULL;
 
     pCurrentFile = readdir(dir);
 
@@ -44,17 +44,24 @@ struct list_node *listdir(const char *path)
         if (pCurrentFile->d_type == DT_DIR) {
             pNewFile->is_dir = 1;
             //We always place folders at the beginning of the list.
-            if (counterElementsList == 0)
+            if (counterElementsList == 0) {
                 pListContainer = create(pNewFile->name, 1, NULL);
-            else
+                free(pNewFile->name);
+                free(pNewFile); //TEST DEBUG
+            }
+            else {
                 addToHead((*pNewFile), &pListContainer);
+            }
 
             counterElementsList++;
 
         } else if (pCurrentFile->d_type == DT_REG) {
             pNewFile->is_dir = 0;
-            if (counterElementsList == 0)
+            if (counterElementsList == 0) {
                 pListContainer = create(pNewFile->name, 0, NULL);
+                free(pNewFile->name);
+                free(pNewFile); //TEST DEBUG
+            }
             else
                 addToEnd(*pNewFile, pListContainer);
 
@@ -93,7 +100,7 @@ void addToEnd(struct list_node value, struct list_node * pHead) {
     while (cursor->next != NULL)
         cursor = cursor->next;
 
-    cursor->next = malloc(sizeof(struct list_node));
+    // cursor->next = malloc(sizeof(struct list_node));
     cursor->next = newNode;
 }
 
