@@ -35,22 +35,29 @@ struct list_node * listdir(const char *path)
         }
 
         struct list_node *pNewFile = NULL;
-        pNewFile = malloc(sizeof(struct list_node)); //TODO
+        pNewFile = calloc(1, sizeof(struct list_node)); //todo remove
 
-        pNewFile->name = malloc(600*sizeof(char)); // potential bug //TODO
+        List_Node newFile;
+
         pNewFile->next = NULL;
+
+
+        int len_name = strlen(pCurrentFile->d_name);
+        pNewFile->name = calloc(len_name + 1, sizeof(char)); //todo remove
+        // newFile.name = calloc(len_name, sizeof(char));
         strcpy(pNewFile->name, pCurrentFile->d_name);
+        // strcpy(newFile.name, pCurrentFile->d_name);
 
         if (pCurrentFile->d_type == DT_DIR) {
             pNewFile->is_dir = 1;
             //We always place folders at the beginning of the list.
             if (counterElementsList == 0) {
-                pListContainer = create(pNewFile->name, 1, NULL);
+                pListContainer = create(pCurrentFile->d_name, 1, NULL);
                 free(pNewFile->name);
-                free(pNewFile); //TEST DEBUG
             }
             else {
                 addToHead((*pNewFile), &pListContainer);
+                // free(pNewFile->name);
             }
 
             counterElementsList++;
@@ -58,16 +65,17 @@ struct list_node * listdir(const char *path)
         } else if (pCurrentFile->d_type == DT_REG) {
             pNewFile->is_dir = 0;
             if (counterElementsList == 0) {
-                pListContainer = create(pNewFile->name, 0, NULL);
+                pListContainer = create(pCurrentFile->d_name, 0, NULL);
                 free(pNewFile->name);
-                free(pNewFile); //TEST DEBUG
             }
-            else
+            else {
                 addToEnd(*pNewFile, pListContainer);
+                // free(pNewFile->name);
+            }
 
             counterElementsList++;
         }
-        
+        free(pNewFile);
         pCurrentFile = readdir(dir);
     }
     closedir(dir);
@@ -78,7 +86,7 @@ struct list_node * create(char * name, int isDir, struct list_node * next) {
     struct list_node * newNode = malloc(sizeof(struct list_node)); //TODO
     size_t nameLen = strlen(name);
     newNode->name = malloc(nameLen * sizeof(char) + 1);
-    strcpy(newNode->name, name);
+    strcpy(newNode->name, name); //TODO check size
     newNode->is_dir = isDir;
     newNode->next = next;
     return newNode;
