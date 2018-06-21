@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
 #include "listdir.h"
 
 /*
@@ -17,11 +22,8 @@ struct list_node * listdir(const char *path)
 
     struct dirent * pCurrentFile = readdir(dir);
 
-    int size = numberElementsFolder(dir);
+    // int size = numberElementsFolder(dir);
     struct list_node * pListContainer = NULL;
-    // pListContainer = malloc(size * sizeof(struct list_node)); //TODO
-    // pListContainer->next = NULL;
-    // pListContainer->name = NULL;
 
     pCurrentFile = readdir(dir);
 
@@ -35,29 +37,23 @@ struct list_node * listdir(const char *path)
         }
 
         struct list_node *pNewFile = NULL;
-        pNewFile = calloc(1, sizeof(struct list_node)); //todo remove
-
-        List_Node newFile;
+        pNewFile = calloc(1, sizeof(struct list_node)); 
 
         pNewFile->next = NULL;
 
-
         int len_name = strlen(pCurrentFile->d_name);
-        pNewFile->name = calloc(len_name + 1, sizeof(char)); //todo remove
-        // newFile.name = calloc(len_name, sizeof(char));
+        pNewFile->name = calloc(len_name + 1, sizeof(char));
         strcpy(pNewFile->name, pCurrentFile->d_name);
-        // strcpy(newFile.name, pCurrentFile->d_name);
 
         if (pCurrentFile->d_type == DT_DIR) {
             pNewFile->is_dir = 1;
             //We always place folders at the beginning of the list.
             if (counterElementsList == 0) {
                 pListContainer = create(pCurrentFile->d_name, 1, NULL);
-                free(pNewFile->name);
+                free(pNewFile->name); //free name now because not used in the linked list (just its value)
             }
             else {
                 addToHead((*pNewFile), &pListContainer);
-                // free(pNewFile->name);
             }
 
             counterElementsList++;
@@ -70,7 +66,6 @@ struct list_node * listdir(const char *path)
             }
             else {
                 addToEnd(*pNewFile, pListContainer);
-                // free(pNewFile->name);
             }
 
             counterElementsList++;

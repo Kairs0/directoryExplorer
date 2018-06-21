@@ -1,10 +1,6 @@
 #ifndef __LINKED_LIST
 #define __LINKED_LIST
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
 #include <dirent.h>
-#include <string.h>
 
 struct list_node
 {
