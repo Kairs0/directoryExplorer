@@ -13,6 +13,10 @@ int test_reeaddir();
     printf("%-15s : sucess\n", #function); \
     else printf("%-15s : failed\n", #function);} while(0);
 
+/* local variable must be defined to use this function */
+#define CHECK_VALUE(current, expected) do { \
+    if (current != expected) { success = 0; } \
+} while(0)
 
 int main(int argc, char const *argv[])
 {
@@ -45,6 +49,9 @@ int test_reeaddir() {
 int test_listdir() {
     int success = 1;
     List_Node * result = listdir("/home/kairs0/Documents/sandbox");
+
+    // CHECK_VALUE(strcmp(result->name, "test"), 0);
+
 
     if (strcmp(result->name, "test") != 0) {
         success = 0;
