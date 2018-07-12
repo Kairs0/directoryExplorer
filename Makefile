@@ -1,20 +1,21 @@
-objectsTest = listdir.c tests.c
+TESTSOURCES = listdir.c tests.c
+SOURCES = tree.c main.c listdir.c cmds.c printUtils.c
+TRASH = *.out *.stackdump *.o
+DEFAULTFLAGS = -g -Wall
+GRAPHFLAGS = -pg
+CC = gcc
 
-all: main.c listdir.c cmds.c
-	gcc -g -Wall -o directoryExplorer main.c tree.c listdir.c cmds.c printUtils.c
+all:
+	$(CC) $(DEFAULTFLAGS) -o directoryExplorer.out $(SOURCES)
 
 graph:
-	gcc -pg main.c tree.c listdir.c cmds.c printUtils.c
+	$(CC) $(GRAPHFLAGS) $(SOURCES)
 
 test:
-	gcc -g -Wall -o binTest $(objectsTest)
+	$(CC) $(DEFAULTFLAGS) -o binTest.out $(TESTSOURCES)
 
 clean:
-	rm -rf *.o
+	rm -f $(TRASH)
 
 mrproper: clean
-	rm -rf directoryExplorerGraph
-	rm -rf directoryExplorer
-	rm -rf *.stackdump
-	rm -rf binTest
-	rm -rf a.out
+	printf "\33c"

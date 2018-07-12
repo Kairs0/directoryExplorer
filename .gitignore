@@ -1,5 +1,4 @@
 *.exe
+*.out
 .idea/*
 *.stackdump
-directoryExplorer
-binTest
