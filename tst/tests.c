@@ -3,7 +3,7 @@
 #include <string.h>
 #include <dirent.h>
 // #include "tests.h"
-#include "listdir.h"
+#include "../src/listdir.h"
 
 int test_freeList();
 int test_listdir();
